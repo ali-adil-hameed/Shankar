@@ -1,0 +1,53 @@
+.invisible {
+    display: none;
+}
+
+@media print {
+    .invisible {
+        display: block !important;
+    }
+    .hideInfo {
+        display: none !important;
+    }
+    
+    .showInfo,
+    table,
+    th,
+    td {
+        text-decoration: none;
+        font-family: "Nimbus Roman No9 L", "Arial", serif;
+        font-size: 12px;
+        color: black;
+        /* background: white; */
+        border-collapse: collapse;
+        border: 1px solid black;
+        text-align: right;
+    }
+    
+    /* table {
+        min-width: 100% !important;
+        max-width: 100% !important;
+        width: 134% !important;
+        margin-bottom: -52mm;
+    } */
+    body{
+        background: white;
+        page-break-after: avoid;
+        page-break-before: avoid;
+    }
+    thead {display: table-header-group;}
+    tfoot {display: table-header-group;}
+    table { page-break-inside:auto }
+    tr    { page-break-inside:avoid; page-break-after:auto }
+    
+    .last-page {
+        position: static;
+        bottom: 20px;
+        left: 0px;
+        width: 100%;
+    }
+    }
+    
+    @page {
+    margin: 5mm;
+    }

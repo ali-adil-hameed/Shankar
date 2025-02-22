@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+      <meta charset="utf-8">
+      <title>ANAS ADMIN PANEL</title>
+  
+      <link rel="stylesheet" href="css/w3.css" />
+      <link rel="stylesheet" href="./css/mycss.css">
+  
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"></script>
+  
+      
+      <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCa8bDY61d4JY2AdXgyS1E3VF0_J7lNG3g",
+          authDomain: "anas-a2ce3.firebaseapp.com",
+          projectId: "anas-a2ce3",
+          storageBucket: "anas-a2ce3.appspot.com",
+          messagingSenderId: "993228053854",
+          appId: "1:993228053854:web:1f193dbf040ecb267883cf"
+        };
+      firebase.initializeApp(firebaseConfig);
+  //   console.log("Firebase initialized successfully!");
+      </script>
+  
+  </head>
+      
+  <body style="display: flex; justify-content: center; align-items: center; height: 100vh;" onload="index()">
+      <div class="w3-container w3-card-4 w3-light-grey w3-margin w3-center" style="width: 600px;">
+        <h2 class="w3-text-blue">Login</h2>
+        <div class="w3-section">
+          <input class="w3-input w3-border" type="email" id="email" placeholder="Email" required><br>
+          <input class="w3-input w3-border" type="password" id="password" placeholder="Password" required><br>
+          <button id="signIn" class="w3-button w3-blue w3-margin-top">Sign In</button>
+          <!-- <button id="signOut" class="w3-button w3-red w3-margin-top">Sign Out</button> -->
+          <p id="message" class="w3-text-red"></p>
+        </div>
+      </div>
+  
+    <p id="message"></p>
+    
+    <script src="index.js"></script>
+  </body>
+  </html>
+

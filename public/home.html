@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+      <meta charset="utf-8">
+    
+      <link rel="stylesheet" href="css/w3.css" />
+      <link rel="stylesheet" href="./css/mycss.css">
+  
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script> 
+      <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"></script>
+
+      <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCa8bDY61d4JY2AdXgyS1E3VF0_J7lNG3g",
+          authDomain: "anas-a2ce3.firebaseapp.com",
+          projectId: "anas-a2ce3",
+          storageBucket: "anas-a2ce3.appspot.com",
+          messagingSenderId: "993228053854",
+          appId: "1:993228053854:web:1f193dbf040ecb267883cf"
+        };
+      firebase.initializeApp(firebaseConfig);
+    
+    
+    </script>
+  <title>Home</title>
+  <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+    
+      h1 {
+        margin-bottom: 20px;
+      }
+    
+      button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition-duration: 0.4s;
+      }
+    
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  
+  <body onload="home()">
+    <div class='w3-row w3-margin w3-center w3-xxlarge w3-card w3-padding w3-round-xlarge' style='border: 3px dashed #bbb'>
+        <img src="img/favicon.png" alt="Anas Logo" style="height: 60px; margin: 5px;">
+        <div class='w3-xlarge w3-btn w3-card w3-round-xlarge w3-left hideInfo'
+            style='margin-top: 6px; border: 3px solid #bbb' id="signOut"> SignOut </div>
+    </div>
+  
+      <div class="w3-center">
+          <button id="StatementOfAccount" class='w3-xxlarge'>Statement of Account</button>
+          <button id="Project" class='w3-xxlarge'>Projects</button>
+          <button id="Expense" class='w3-xxlarge'>Expenses</button>
+          <button id="Income" class='w3-xxlarge'>Incomes</button>
+      </div>
+  
+  
+    <script>
+      // Function to get the project ID from the URL query parameter
+      function getProjectIdFromURL() {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get('projectId');
+      }
+  
+      // Call the function to get the project ID from the URL
+      const projectId = getProjectIdFromURL();
+    </script>
+    <script src="home.js"></script>
+  </body>
+  </html>
+  
+  

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+        <meta charset="utf-8">
+        <title>ANAS ADMIN PANEL</title>
+    
+        <link rel="stylesheet" href="css/w3.css" />
+        <link rel="stylesheet" href="./css/mycss.css">
+    
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+        
+        <script>
+            const firebaseConfig = {
+              apiKey: "AIzaSyCa8bDY61d4JY2AdXgyS1E3VF0_J7lNG3g",
+              authDomain: "anas-a2ce3.firebaseapp.com",
+              projectId: "anas-a2ce3",
+              storageBucket: "anas-a2ce3.appspot.com",
+              messagingSenderId: "993228053854",
+              appId: "1:993228053854:web:1f193dbf040ecb267883cf"
+            };
+          firebase.initializeApp(firebaseConfig);
+        </script>
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    
+    <body onload="loadProject()">
+        <div class='w3-row w3-margin w3-center w3-xxlarge w3-card w3-padding w3-round-xlarge' style='border: 3px dashed #bbb'>
+            <div class='w3-xlarge w3-btn w3-card w3-round-xlarge w3-right hideInfo'
+                style='margin-top: 6px; border: 3px solid #bbb'
+                onclick="document.getElementById('id01').style.display='block'"> + </div>
+                Debit & Credit
+            <div class='w3-xlarge w3-btn w3-card w3-round-xlarge w3-left hideInfo'
+                style='margin-top: 6px; border: 3px solid #bbb' onclick="window.history.back()"> Back </div>
+        </div>
+        
+        <button id="expandBtn" class="w3-button w3-green w3-round-large w3-right w3-margin">↕</button>
+        <div id="expandableView" class="hidden">
+            <div class="w3-row w3-margin">
+                <div class="w3-col" style="width: 35%;">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="w3-col" style="width: 35%;">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="w3-col" style="width: 15%;">
+                    <button id="filterBtn" class="w3-button w3-blue">Filter</button>
+                </div>
+                <div class="w3-col" style="width: 15%;">
+                    <button id="downloadBtn" class="w3-button w3-yellow">Download</button>
+                </div>
+            </div>
+        </div>
+    
+    <table id="dataTable" class="w3-table-all" style="width:100%;">
+        <thead>
+            <tr class="w3-light-blue">
+                <th class="w3-center">Credit</th>
+                <th class="w3-center">Debit</th>
+                <th class="w3-center">Note</th>
+                <th class="w3-center">Created Date</th>
+                <th class="w3-center hideInfo">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="Body">
+        </tbody>
+    </table>
+    
+        <!-- Add model -->
+        <div id='id01' class='w3-modal'>
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:80%">
+    
+                <div class='w3-center'><br>
+                    <span onclick="document.getElementById('id01').style.display='none'"
+                        class='w3-button w3-xlarge w3-red w3-display-topright' title='Close Modal'>&times;
+                    </span>
+                </div>
+                <br /><br />
+    
+                <div class='w3-container w3-border-top w3-padding-16'>
+    
+                    <!-- insert data -->
+                    <div class='w3-row'>
+                            <div class='w3-left' style='width:35%'>
+                                <p><label class='w3-left  w3-xlarge w3-text-black'> Credit </label></p>
+                            </div>
+                            <div class='w3-padding-small w3-left' style='width:65%'>
+                                <input style=' direction: rtl;' id='Credit' required='required'
+                                    class='w3-input w3-border w3-round-large w3-hover-light-blue' type='text'>
+                            </div>
+                        </div>
+    
+                    <div class='w3-row'>
+                        <div class='w3-left' style='width:35%'>
+                            <p><label class='w3-left  w3-xlarge w3-text-black'> Debit </label></p>
+                        </div>
+                        <div class='w3-padding-small w3-left' style='width:65%'>
+                            <input style=' direction: rtl;' id='Debit' required='required'
+                                class='w3-input w3-border w3-round-large w3-hover-light-blue' type='text'>
+                        </div>
+                    </div>
+    
+                        <div class='w3-row'>
+                            <div class='w3-left' style='width:35%'>
+                                <p><label class='w3-left w3-xlarge w3-text-black'> Note </label></p>
+                            </div>
+                            <div class='w3-padding-small w3-left' style='width:65%'>
+                                <input style=' direction: rtl;' id='Note' required='required'
+                                    class='w3-input w3-border w3-round-large w3-hover-light-blue' type='text'>
+                            </div>
+                        </div>
+    
+                        <div class='w3-row'>
+                            <div class='w3-left' style='width:35%'>
+                                <p><label class='w3-left  w3-xlarge w3-text-black'> Created Date </label></p>
+                            </div>
+                            <div class='w3-padding-small w3-left' style='width:65%'>
+                              <div class='w3-padding-small w3-left' style='width:65%'>
+                                  <!-- Input field for date -->
+                                  <input style='direction: rtl;' id='createdDate' required='required'
+                                      class='w3-input w3-border w3-round-large w3-hover-light-blue' type='date' placeholder='Select Date'>
+                              </div>
+                          </div>
+                        </div>
+                            
+    
+                        <div class='w3-row'>
+                            <div class='w3-col w3-right' style='width:95%'>
+                                <input type='submit' value='Add Credit & Debit' id='addBtn' class="w3-gray w3-text-black w3-xlarge w3-button w3-block w3-margin w3-blue w3-round-large w3-right w3-hover-light-blue" />
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+    
+                </div>
+    
+            </div>
+        </div>
+    
+      
+        <!-- Edit model -->
+        <div id='id02' class='w3-modal'>
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:80%">
+      
+                <div class='w3-center'><br>
+                    <span onclick="document.getElementById('id02').style.display='none'"
+                        class='w3-button w3-xlarge w3-red w3-display-topright' title='Close Modal'>&times;
+                    </span>
+                </div>
+                <br /><br />
+      
+                <div class='w3-container w3-border-top w3-padding-16'>
+      
+                    <!-- insert data -->
+                    <div class='w3-row'>
+                        <div class='w3-left' style='width:35%'>
+                            <p><label class='w3-left  w3-xlarge w3-text-black'> Credit </label></p>
+                        </div>
+                        <div class='w3-padding-small w3-left' style='width:65%'>
+                            <input style=' direction: rtl;' id='UpdatetCredit' required='required'
+                                class='w3-input w3-border w3-round-large w3-hover-light-blue' type='text'>
+                        </div>
+                    </div>
+    
+                <div class='w3-row'>
+                    <div class='w3-left' style='width:35%'>
+                        <p><label class='w3-left  w3-xlarge w3-text-black'> Debit </label></p>
+                    </div>
+                    <div class='w3-padding-small w3-left' style='width:65%'>
+                        <input style=' direction: rtl;' id='UpdateDebit' required='required'
+                            class='w3-input w3-border w3-round-large w3-hover-light-blue' type='text'>
+                    </div>
+                </div>
+    
+                    <div class='w3-row'>
+                        <div class='w3-left' style='width:35%'>
+                            <p><label class='w3-left w3-xlarge w3-text-black'> Note </label></p>
+                        </div>
+                        <div class='w3-padding-small w3-left' style='width:65%'>
+                            <input style=' direction: rtl;' id='UpdateNote' required='required'
+                                class='w3-input w3-border w3-round-large w3-hover-light-blue' type='text'>
+                        </div>
+                    </div>
+      
+                    <div class='w3-row'>
+                        <div class='w3-left' style='width:35%'>
+                            <p><label class='w3-left  w3-xlarge w3-text-black'> Created Date </label></p>
+                        </div>
+                        <div class='w3-padding-small w3-left' style='width:65%'>
+                          <div class='w3-padding-small w3-left' style='width:65%'>
+                              <!-- Input field for date -->
+                              <input style='direction: rtl;' id='updateCreatedDate' required='required'
+                                class='w3-input w3-border w3-round-large w3-hover-light-blue' type='date' placeholder='Select Date'>
+                          </div>
+                      </div>
+                    </div>
+                            
+      
+                        <div class='w3-row'>
+                            <div class='w3-col w3-right' style='width:95%'>
+                                <input type='submit' value='Update Project' id='UpdateBtn' class="w3-gray w3-text-black w3-xlarge w3-button w3-block w3-margin w3-blue w3-round-large w3-right w3-hover-light-blue" />
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+      
+                </div>
+      
+            </div>
+        </div>
+    
+    <script src="DebitCredit.js"></script>
+    
+    </body>
+    </html>
