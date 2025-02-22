@@ -260,6 +260,19 @@ const loadProject = async () => {
             expandableView.classList.add("hidden");
         }
     });
+    
+    document.getElementById('signOut').addEventListener('click', e => {
+        firebase.auth().signOut()
+          .then(() => {
+            sessionStorage.removeItem('uid');
+            sessionStorage.removeItem('email');
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            // An error happened.
+            console.error(error);
+          });
+        });
 
     }
     

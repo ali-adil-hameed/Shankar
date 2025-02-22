@@ -11,7 +11,7 @@ function index() {
     firebase.auth().signInWithEmailAndPassword(email, password).then((userCredential) => {
       sessionStorage.setItem('uid', userCredential.user.uid);
       sessionStorage.setItem('email', userCredential.email);
-      window.location.href = "home.html";
+      window.location.href = "StatementOfAccount.html";
     })
     .catch((error) => {
       // Handle Errors here.
