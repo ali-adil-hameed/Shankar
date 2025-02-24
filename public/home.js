@@ -1,52 +1,100 @@
-function home(){
-    const uid = sessionStorage.getItem('uid');
-    const email = sessionStorage.getItem('email');
-    if (!uid || !email) {
-        window.location.href = "index.html";
+function home() {
+    const loader = document.getElementById('loader');
+    const content = document.getElementById('content');
+
+    function showLoader() {
+        loader.style.display = 'block';
+        content.style.display = 'none';
+    }
+
+    function hideLoader() {
+        loader.style.display = 'none';
+        content.style.display = 'block';
+    }
+
+    function handleError(error) {
+        console.error(error);
+        alert('An error occurred. Please try again later.');
+    }
+
+    async function checkAuth() {
+        showLoader();
+        try {
+            const uid = sessionStorage.getItem('uid');
+            const email = sessionStorage.getItem('email');
+            
+            if (!uid || !email || uid === 'undefined' || uid === 'null') {
+                window.location.href = "index.html";
+                return false;
+            }
+            
+            // Verify with Firebase
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                sessionStorage.clear();
+                window.location.href = "index.html";
+                return false;
+            }
+            
+            return true;
+        } catch (error) {
+            handleError(error);
+            return false;
+        } finally {
+            hideLoader();
+        }
     }
 
     function redirectToTable(tableType) {
-        // Define the URL for the respective table page
-        let tablePage;
-        if (tableType === 'StatementOfAccount') {
-            tablePage = 'StatementOfAccount.html';
-        } else if (tableType === 'expense') {
-            tablePage = 'homeCategory.html?homeCategory=Expense';
-        } else if (tableType === 'Income') {
-            tablePage = 'homeCategory.html?homeCategory=Income';
-        } else if (tableType === 'Project') {
-            tablePage = 'project.html';
+        showLoader();
+        try {
+            let tablePage;
+            switch(tableType.toLowerCase()) {
+                case 'statementofaccount':
+                    tablePage = 'StatementOfAccount.html';
+                    break;
+                case 'expense':
+                    tablePage = 'DebitCredit.html?type=expense';
+                    break;
+                case 'income':
+                    tablePage = 'DebitCredit.html?type=income';
+                    break;
+                default:
+                    throw new Error('Invalid table type');
+            }
+            window.location.href = tablePage;
+        } catch (error) {
+            handleError(error);
+            hideLoader();
         }
-        window.location.href = `${tablePage}`;
     }
-    
-    // Add click event listeners to the buttons
-    document.getElementById('Expense').addEventListener('click', () => {
-        redirectToTable('expense');
-    });
-    
-    document.getElementById('Income').addEventListener('click', () => {
-        redirectToTable('Income');
-    });
-    
-    document.getElementById('Project').addEventListener('click', () => {
-        redirectToTable('Project');
-    });
-    
-    document.getElementById('StatementOfAccount').addEventListener('click', () => {
-        redirectToTable('StatementOfAccount');
-    });
-    
-    document.getElementById('signOut').addEventListener('click', e => {
-        firebase.auth().signOut()
-          .then(() => {
-            sessionStorage.removeItem('uid');
-            sessionStorage.removeItem('email');
-            window.location.href = "index.html";
-          })
-          .catch((error) => {
-            // An error happened.
-            console.error(error);
-          });
+
+    async function initialize() {
+        if (!await checkAuth()) return;
+
+        // Add click event listeners to the buttons
+        const buttons = ['StatementOfAccount', 'Expense', 'Income'];
+        buttons.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('click', () => redirectToTable(id));
+            }
         });
+        
+        // Sign out handler
+        document.getElementById('signOut').addEventListener('click', async () => {
+            showLoader();
+            try {
+                await firebase.auth().signOut();
+                sessionStorage.clear();
+                window.location.href = "index.html";
+            } catch (error) {
+                handleError(error);
+                hideLoader();
+            }
+        });
+    }
+
+    // Start initialization
+    initialize().catch(handleError);
 }
